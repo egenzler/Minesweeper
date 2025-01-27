@@ -8,6 +8,8 @@ const MINE = `<img class="mine-img" src="img/mine.gif" alt=""></img>`
 
 //  '💣'
 const FLAGGE = '🚩'
+const LIVE = '❤️'
+const HINT = '💡'
 
 var gLevel = {
     SIZE: 4,
@@ -25,9 +27,12 @@ function onInit() {
     setEmtiyCells()
     closeGameOver()
     setGame()
+    setSmiley()
+    updateLives()
+    updateHints()
     gBoard = buildBoard()
     renderBoard(gBoard, '.board-container')
-    
+
 }
 
 
@@ -38,23 +43,56 @@ function onCellClicked(cell, i, j) {
     var cell = gBoard[i][j]
     var elCell = document.querySelector(getSelectorBylocation({ i, j }))
 
-    if (!gGame.shownCount) setMines()
-    if (!gGame.shownCount) updateMineCount(gBoard)
-    if (!gGame.isOn) return console.log('המשחק נגמר');
-    if (cell.isMarked) return
+    if (!gGame.shownCount) {
+        setMines()
+        updateMineCount(gBoard)
+    }
+    if (!gGame.isOn) return
     if (cell.isShown) return
-    if (cell.isMine) return gameOver()
+    if (gGame.isHints) {
+        hintsMod(i, j)
+        return
+    }
+    if (cell.isMarked) return
+    if (gGame.isHints) {
+        gGame.hints--
+        updateHints()
+        hideHintsMod(i, j)
+
+    }
+    if (cell.isMine) {
+        if (gGame.lives) {
+            elCell.classList.add('revealed')
+            elCell.innerHTML = MINE
+            gGame.lives--
+            updateLives()
+            if (!gGame.lives) {
+                setSmiley('😒')
+                return gameOver('Oops! You hit a mine')
+            }
+            setTimeout(hideMine.bind(null, elCell), 1000);
+            return
+        }
+        setSmiley('😒')
+        return gameOver('Oops! You hit a mine')
+    }
     if (!cell.minesAroundCount) {
         expandShown(gBoard, elCell, i, j)
     } else markedIsShown(cell, elCell)
 
+    if (checkGameOver()) {
+        setSmiley('😎')
+        gameOver('ניצחת')
+    }
 }
+
 
 function markedIsShown(cell, elCell) {
     cell.isShown = true
     gGame.shownCount++
     elCell.classList.add('revealed')
     elCell.innerHTML = +cell.minesAroundCount
+
 }
 
 function buildBoard() {
@@ -83,13 +121,17 @@ function setGame() {
         isOn: true,
         shownCount: 0,
         markedCount: 0,
-        secsPassed: 0
+        secsPassed: 0,
+        lives: 3,
+        hints: 3,
+        isHints: false,
+        hintInUsed: ''
     }
 }
 
 
-function gameOver() {
-    console.log('נכשלתי');
+function gameOver(TEXT) {
+
     gGame.isOn = false
     for (var i = 0; i < gBoard.length; i++) {
         for (var j = 0; j < gBoard[0].length; j++) {
@@ -100,7 +142,7 @@ function gameOver() {
                 cell.isShown = true
                 elCell.classList.add('revealed')
                 elCell.innerHTML = MINE
-                document.querySelector('.game-over span').innerText = 'וואו הפסדת'
+                document.querySelector('.game-over span').innerText = TEXT
                 document.querySelector('.game-over').style.display = 'block'
             }
         }
@@ -117,18 +159,6 @@ function closeGameOver() {
 }
 
 
-// function gameOver(text) {
-//     console.log('Game Over')
-//     document.querySelector('.game-over span').innerText = 'וואו ניצחת'
-//     document.querySelector('.game-over').style.display = 'block'
-//    gGame.isOn = false
-//     // if (gGame.score > gBestScore) gBestScore = gGame.score
-//     // saveBestScore(gBestScore)
-//     // document.querySelector('h3 span').innerText = gBestScore
-
-// }
-
-
 
 function setEmtiyCells() {
     gEmtiyCells = gLevel.SIZE * gLevel.SIZE - gLevel.MINES
@@ -136,7 +166,11 @@ function setEmtiyCells() {
 
 
 
-
+function checkGameOver() {
+    if (gEmtiyCells === gGame.shownCount &&
+        gLevel.MINES === gGame.markedCount) return true
+    return false
+}
 
 
 

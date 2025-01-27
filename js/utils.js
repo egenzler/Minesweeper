@@ -90,7 +90,7 @@ function onCellMarked(elCell,i,j,event) {
     // var elCell = document.querySelector(getSelectorBylocation({ i, j }))
     gGame.markedCount++
     elCell.innerHTML = FLAGGE
-       
+    if(checkGameOver()) return gameOver('ניצחת')
     } return
 }
 

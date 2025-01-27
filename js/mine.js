@@ -19,12 +19,8 @@ function countMineAround(board, rowIdx, colIdx) {
             if (j < 0 || j >= board[0].length) continue
             var currCell = board[i][j].isMine
             if (currCell) mineCount++
-            // console.log(mineCount);
-
         }
     }
-    // const elballsCount = 
-    // document.querySelector('.BallsAround').innerHTML = mineCount
     return mineCount
 }
 
@@ -37,9 +33,9 @@ function expandShown(board, elCell, rowIdx, colIdx) {
             // if (i === rowIdx && j === colIdx) continue
             if (j < 0 || j >= board[0].length) continue
             var currCell = board[i][j]
-            
+
             if (currCell.isMarked) continue
-            
+
             var updateElCell = document.querySelector(getSelectorBylocation({ i, j }))
             var Count = currCell.minesAroundCount
 
@@ -54,18 +50,24 @@ function expandShown(board, elCell, rowIdx, colIdx) {
 }
 
 
-function setMines(){
+function setMines() {
     for (var d = 0; d < gLevel.MINES; d++) {
-        
-        var i = getRandomIntInclusive(0, gLevel.SIZE -1)
-        var j = getRandomIntInclusive(0, gLevel.SIZE -1)
+
+        var i = getRandomIntInclusive(0, gLevel.SIZE - 1)
+        var j = getRandomIntInclusive(0, gLevel.SIZE - 1)
         console.log('i', i);
         console.log('j', j);
-        
-        
+
+
         gBoard[i][j].isMine = true
-        
+
     }
+}
+
+function hideMine(elCell) {
+    elCell.classList.remove('revealed')
+    elCell.innerHTML = ''
+
 }
 
 

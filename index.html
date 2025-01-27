@@ -8,9 +8,20 @@
 </head>
 <body onload="onInit()">
 
-    <h1>המשחק של אלעזר</h1>
+    <h1 class="game-title">MINE MASTER</h1>
+
+    <div class="lives">lives: <span></span></div>
+    <div class="hints-container">
+    </div>
+    <div onclick="smileyOnInit()" class="smiley"><span>😉</span></div>
 
     <div class="board-container"></div>
+
+    <div class="levelsButtons-container">
+        <button onclick="changeLevels(4,2)" class="diff-btn easy">🌱 Easy</button>
+        <button onclick="changeLevels(8,14)" class="diff-btn medium">🌟 Medium</button>
+        <button onclick="changeLevels(12,32)" class="diff-btn hard">💥 Hard</button>
+    </div>
 
     <div class="game-over" style="display: none;">
         <span></span>
@@ -21,5 +32,7 @@
     <script src="js/game.js"></script>
     <script src="js/utils.js"></script>
     <script src="js/mine.js"></script>
+    <script src="js/gameExtras.js"></script>
+    <script src="js/levels.js"></script>
 </body>
 </html>
