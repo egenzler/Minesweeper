@@ -67,9 +67,9 @@ function getSelectorBylocation(location) {
 
 
 function getImg(img) {
-    console.log(`<img src="${img}" alt=""></img>` );
-    
-   return `<img src="${img}" alt=""></img>`
+    console.log(`<img src="${img}" alt=""></img>`);
+
+    return `<img src="${img}" alt=""></img>`
 }
 
 // function saveBestScore(score) {
@@ -81,16 +81,28 @@ function getImg(img) {
 //     return localStorage.getItem('bestScore') || 0; // מחזיר 0 אם אין ערך שמור
 // }
 
- 
-function onCellMarked(elCell,i,j,event) {
-    event.preventDefault();
+
+function onCellMarked(elCell, i, j, event) {
+
+    const board = document.querySelector('.board-container');
+    board.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+    });
+
     if (event.button === 2 || event.type === 'contextmenu') {
-    var cell = gBoard[i][j]
-    cell.isMarked = true
-    // var elCell = document.querySelector(getSelectorBylocation({ i, j }))
-    gGame.markedCount++
-    elCell.innerHTML = FLAGGE
-    if(checkGameOver()) return gameOver('ניצחת')
+        var cell = gBoard[i][j]
+
+        if (cell.isMarked) {
+            cell.isMarked = false
+            gGame.markedCount--
+            elCell.innerHTML = ''
+        
+        } else {
+            cell.isMarked = true
+            gGame.markedCount++
+            elCell.innerHTML = FLAGGE
+        }
+        if (checkGameOver()) return gameOver('ניצחת')
     } return
 }
 

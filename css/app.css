@@ -28,9 +28,11 @@ table {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	height: 100%;
+	/* height: 100%; */
+	height: auto; 
 	width: 100%;
 	position: relative;
+	margin-bottom: 20px; 
 }
 
 
@@ -99,36 +101,37 @@ table {
 	margin-top: 20px;
 	height: 100%;
 	width: 100%;
-	font-size: 3rem;
+	font-size: 4rem;
 }
 
 .lives {
 
-	font-size: 1.5rem;
+	font-size: 3rem;
 
 }
 
 .hints-container {
 
-	font-size: 1.5rem;
+	font-size: 3rem;
 
 }
 .hint {
 	cursor: pointer;
 }
 
-.inUsed {
-	
-	font-size: 3rem;
-
+.hint.inUsed {
+    font-size: 4rem;
+	transition: transform 0.3s; 
+	cursor: pointer;
 }
 
 
 .levelsButtons-container {
     display: flex;
-    gap: 20px; 
+    gap: 30px; 
     justify-content: center;
     margin: 20px 0;
+	
 }
 
 .diff-btn {

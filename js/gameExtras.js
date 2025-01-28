@@ -15,21 +15,23 @@ function updateLives() {
 
 function updateHints() {
     var hintHTML = 'hints: '
-    for (var i = 0; i < gGame.hints ; i++) {
-     hintHTML += `<span onclick="useHint(this)" class="hint">💡</span> `
+    for (var i = 0; i < gGame.hints; i++) {
+        hintHTML += `<span onclick="useHint(this)" class="hint">💡</span> `
     }
     document.querySelector('.hints-container').innerHTML = hintHTML
 }
 
 
 function useHint(hint) {
+    console.log(hint);
+    
     if (!hint.classList.contains('used')) {
         gGame.isHints = true
         gGame.hintInUsed = hint
         gGame.hints--
-        
+
         hint.classList.add('inUsed');
-}
+    }
 }
 
 
@@ -68,6 +70,29 @@ function hideHintsMod(rowIdx, colIdx) {
     hint.classList.remove('inUsed');
     hint.classList.add('used');
     gGame.isHints = false
-    gGame.hintInUsed = ''
+    // gGame.hintInUsed = ''
 }
 
+
+
+
+
+function getNeighboringCells(board, rowIdx, colIdx) {
+    var emptyCells = []
+    // emptyCells.push({i,j})
+    // console.log(rowIdx,colIdx );
+
+
+    for (var i = rowIdx - 1; i <= rowIdx + 1; i++) {
+        if (i < 0 || i >= board.length) continue
+        for (var j = colIdx - 1; j <= colIdx + 1; j++) {
+            if (i === rowIdx && j === colIdx) continue
+            if (j < 0 || j >= board[0].length) continue
+            var idxCell = ({ i, j })
+
+            emptyCells.push(idxCell)
+        }
+    }
+
+    return emptyCells
+}

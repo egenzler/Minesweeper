@@ -20,11 +20,11 @@ var gLevel = {
 
 
 
-var gEmtiyCells
+var gEmptyCells
 
 function onInit() {
 
-    setEmtiyCells()
+    setEmptyCells()
     closeGameOver()
     setGame()
     setSmiley()
@@ -44,22 +44,23 @@ function onCellClicked(cell, i, j) {
     var elCell = document.querySelector(getSelectorBylocation({ i, j }))
 
     if (!gGame.shownCount) {
-        setMines()
+        setMines(cell,i,j)
+        
         updateMineCount(gBoard)
     }
     if (!gGame.isOn) return
     if (cell.isShown) return
     if (gGame.isHints) {
         hintsMod(i, j)
+        var hint = gGame.hintInUsed
+        hint.classList.remove('inUsed');
+        hint.classList.add('used');
+        gGame.isHints = false
+        // gGame.hintInUsed = ''
+
         return
     }
     if (cell.isMarked) return
-    if (gGame.isHints) {
-        gGame.hints--
-        updateHints()
-        hideHintsMod(i, j)
-
-    }
     if (cell.isMine) {
         if (gGame.lives) {
             elCell.classList.add('revealed')
@@ -77,7 +78,7 @@ function onCellClicked(cell, i, j) {
         return gameOver('Oops! You hit a mine')
     }
     if (!cell.minesAroundCount) {
-        expandShown(gBoard, elCell, i, j)
+        expandShown(gBoard, i, j)
     } else markedIsShown(cell, elCell)
 
     if (checkGameOver()) {
@@ -160,14 +161,14 @@ function closeGameOver() {
 
 
 
-function setEmtiyCells() {
-    gEmtiyCells = gLevel.SIZE * gLevel.SIZE - gLevel.MINES
+function setEmptyCells() {
+    gEmptyCells = gLevel.SIZE * gLevel.SIZE - gLevel.MINES
 }
 
 
 
 function checkGameOver() {
-    if (gEmtiyCells === gGame.shownCount &&
+    if (gEmptyCells === gGame.shownCount &&
         gLevel.MINES === gGame.markedCount) return true
     return false
 }
