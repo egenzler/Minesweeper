@@ -15,7 +15,6 @@ function renderBoard(mat, selector) {
             strHTML += `<td onclick="onCellClicked(this,${i},${j})" 
              onmousedown="onCellMarked(this,${i},${j},event)"
              class="${className}">
-
             </td>`
         }
         strHTML += '</tr>'
@@ -44,24 +43,40 @@ function getRandomIntInclusive(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min
 }
 
+function getEmptySafecell(board) {
+    var cells = emptySafeCells(board)
+    var idx = getRandomIntInclusive(0, cells.length)
+    var cell = cells[idx]
+    return cell
+}
 
 
-// function emptyCell(board) {
-//     var emptyBoard = []
-//     for (var i = 0; i < board.length; i++) {
-//         for (var j = 0; j < board[0].length; j++) {
-//             var cell = { i, j }
-//             if (board[i][j] === EMPTY) emptyBoard.push(cell)
-//         }
-
-//     }
-//     return emptyBoard
-// }
+function emptySafeCells(board) {
+    var emptySafeBoard = []
+    for (var i = 0; i < board.length; i++) {
+        for (var j = 0; j < board[0].length; j++) {
+            var emptyCell = { i, j }
+            var cell = board[i][j]
+            if (cell.isMine || cell.isShown) continue
+            emptySafeBoard.push(emptyCell)
+        }
+        
+    }
+    // console.log(emptySafeBoard);
+    return emptySafeBoard
+}
 
 
 function getSelectorBylocation(location) {
     const selector = `.cell-${location.i}-${location.j}`
     return selector
+}
+
+function getElcellByLocation(location){
+    var selector = getSelectorBylocation(location)
+    var elCell = document.querySelector(selector)
+return elCell
+
 }
 
 
@@ -73,17 +88,21 @@ function getImg(img) {
 }
 
 function saveBestScore(score) {
-    console.log('gBestScore' , gBestScore , 'score', score);
-    
-    if  (score > gBestScore) {
+    console.log('gBestScore', gBestScore, 'score', score);
+
+    if (gBestScore === 0 || score < gBestScore) {
         gBestScore = score
-        localStorage.setItem('bestScore', score);
+        var bestScore = `bestScore-${gLevel.MOD}`
+        localStorage.setItem(bestScore, score);
     }
 }
 
 
 function getBestScore() {
-    return localStorage.getItem('bestScore') || 0; // מחזיר 0 אם אין ערך שמור
+    console.log(`bestScore-${gLevel.MOD}`);
+    var bestScore = `bestScore${gLevel.MOD}`
+
+    return localStorage.getItem(bestScore) || 0; // מחזיר 0 אם אין ערך שמור
 }
 
 
@@ -97,11 +116,13 @@ function onCellMarked(elCell, i, j, event) {
     if (event.button === 2 || event.type === 'contextmenu') {
         var cell = gBoard[i][j]
 
+        if (cell.isShown) return
+
         if (cell.isMarked) {
             cell.isMarked = false
             gGame.markedCount--
             elCell.innerHTML = ''
-        
+
         } else {
             cell.isMarked = true
             gGame.markedCount++

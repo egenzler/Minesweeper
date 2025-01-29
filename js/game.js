@@ -11,11 +11,12 @@ const FLAGGE = '🚩'
 const LIVE = '❤️'
 const HINT = '💡'
 
-var gTimerInterval
-var gBestScore 
+var gTimerInterval = 0
+var gBestScore
 var gLevel = {
     SIZE: 4,
-    MINES: 2
+    MINES: 2,
+    MOD: 'easy'
 }
 
 
@@ -25,15 +26,12 @@ var gLevel = {
 var gEmptyCells
 
 function onInit() {
-    gBestScore = 0
-
+    gBestScore = getBestScore()
+    clearInterval(gTimerInterval)  
     setEmptyCells()
     closeGameOver()
     restartTimer()
     setGame()
-    setSmiley()
-    updateLives()
-    updateHints()
     gBoard = buildBoard()
     renderBoard(gBoard, '.board-container')
 
@@ -133,9 +131,18 @@ function setGame() {
         hints: 3,
         isHints: false,
         hintInUsed: '',
-        gameStartTime: 0
+        gameStartTime: 0,
+        onSafeclick: false,
+        safeclicks: 3
     }
+
+    setSmiley()
+    updateLives()
+    updateHints()
+    updateBestScore()
+    updateSafeClicks()
 }
+
 
 
 function gameOver(TEXT) {
@@ -147,14 +154,13 @@ function gameOver(TEXT) {
             var selector = getSelectorBylocation({ i, j })
             var elCell = document.querySelector(selector)
             if (cell.isMine) {
-                clearInterval(gTimerInterval)     
                 
+                clearInterval(gTimerInterval)     
                 saveBestScore(Math.floor((Date.now() - gGame.gameStartTime)/1000))
                 
-                console.log(Math.floor((Date.now() - gGame.gameStartTime)/1000));
-
                 cell.isShown = true
                 elCell.classList.add('revealed')
+                // renderCell({i,j}, MINE)
                 elCell.innerHTML = MINE
                 document.querySelector('.game-over span').innerText = TEXT
                 document.querySelector('.game-over').style.display = 'block'
@@ -194,7 +200,7 @@ function checkGameOver() {
 function setGameTimer() {
 
     const timeDiff = Date.now() - gGame.gameStartTime
-    const seconds = Math.floor(timeDiff / 1000)
+    const seconds = Math.floor(timeDiff / 1000)  
 
     document.querySelector('.timer-smiley-container .game-timer').innerText = seconds
     return seconds

@@ -22,9 +22,19 @@ function updateHints() {
 }
 
 
+function updateBestScore() {
+    document.querySelector('.bestScore').innerText = gBestScore
+}
+
+function updateSafeClicks() {
+
+    document.querySelector('.safe-clicks-container span').innerText = gGame.safeclicks
+
+}
+
 function useHint(hint) {
     console.log(hint);
-    
+
     if (!hint.classList.contains('used')) {
         gGame.isHints = true
         gGame.hintInUsed = hint
@@ -63,9 +73,9 @@ function hideHintsMod(rowIdx, colIdx) {
             if (cell.isShown) continue
             var elCell = document.querySelector(getSelectorBylocation({ i, j }))
             elCell.classList.remove('revealed')
-            if(cell.isMarked) elCell.innerHTML = FLAGGE 
-            else elCell.innerHTML = '' 
-            
+            if (cell.isMarked) elCell.innerHTML = FLAGGE
+            else elCell.innerHTML = ''
+
         }
     }
     var hint = gGame.hintInUsed
@@ -76,14 +86,8 @@ function hideHintsMod(rowIdx, colIdx) {
 }
 
 
-
-
-
 function getNeighboringCells(board, rowIdx, colIdx) {
     var emptyCells = []
-    // emptyCells.push({i,j})
-    // console.log(rowIdx,colIdx );
-
 
     for (var i = rowIdx - 1; i <= rowIdx + 1; i++) {
         if (i < 0 || i >= board.length) continue
@@ -91,10 +95,27 @@ function getNeighboringCells(board, rowIdx, colIdx) {
             if (i === rowIdx && j === colIdx) continue
             if (j < 0 || j >= board[0].length) continue
             var idxCell = ({ i, j })
-
             emptyCells.push(idxCell)
         }
     }
-
     return emptyCells
+}
+
+
+function onSafeclick() {
+    if (!gGame.safeclicks) return
+    gGame.onSafeclick = true
+    gGame.safeclicks--
+    document.querySelector('.safe-clicks-container span').innerText = gGame.safeclicks
+    gGame.onSafeclick = false
+
+    var idx = getEmptySafecell(gBoard)
+    var elCell = getElcellByLocation(idx)
+
+    elCell.classList.add("safe-clicked")
+    setTimeout(() => {
+        elCell.classList.remove("safe-clicked");
+    }, 3000)
+    return
+
 }

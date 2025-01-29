@@ -29,22 +29,20 @@ function countMineAround(board, rowIdx, colIdx) {
 }
 
 
+for (var i = 0; i <= gChacsContainer.length; i++) {
 
-function expandShown(board, rowIdx, colIdx) {
 
-    gChacsContainer.push({ i: rowIdx, j: colIdx })
-    console.log(gChacsContainer.length);
-    
-    for (var i = 0; i < gChacsContainer.length; i++) {
-        console.log(gChacsContainer.length);
-        
-        var cellToChech = gChacsContainer.splice(gChacsContainer.length - 1, 1)
-        rowIdx = cellToChech[0].i
-        colIdx = cellToChech[0].j
-        
-        expandShownCell(board, rowIdx, colIdx)
-        
-        console.log(gChacsContainer.length);
+    function expandShown(board, rowIdx, colIdx) {
+
+        gChacsContainer.push({ i: rowIdx, j: colIdx })
+        while (gChacsContainer.length > 0) {
+            var cellToChech = gChacsContainer.splice(gChacsContainer.length - 1, 1)
+            rowIdx = cellToChech[0].i
+            colIdx = cellToChech[0].j
+
+            expandShownCell(board, rowIdx, colIdx)
+
+        }
     }
 }
 
