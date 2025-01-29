@@ -253,6 +253,6 @@ table {
 
 .cell.safe-clicked {
     animation: safe-clicks-highlight 1.5s ease-in-out infinite alternate;
-    border-color: #00ff00; /* מסגרת ירוקה כדי להדגיש */
+    border-color: #00ff00; 
 }
 
