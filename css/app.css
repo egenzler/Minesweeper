@@ -95,14 +95,7 @@ table {
 
 }
 
-.smiley{
-	cursor: pointer;
 
-	margin-top: 20px;
-	height: 100%;
-	width: 100%;
-	font-size: 4rem;
-}
 
 .lives {
 
@@ -113,6 +106,7 @@ table {
 .hints-container {
 
 	font-size: 3rem;
+	margin-bottom: 60px;
 
 }
 .hint {
@@ -160,4 +154,39 @@ table {
 
 .diff-btn:hover {
     transform: translateY(-5px);
+}
+
+.timer-smiley-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    margin: 20px auto;
+    width: 100%;
+}
+
+
+.smiley{
+	cursor: pointer;
+	position: absolute;
+
+	margin-top: -100px;
+	height: 100%;
+	width: 100%;
+	left: 50%;
+	font-size: 4rem;
+	transform: translateX(-50%);
+}
+
+
+.game-timer {
+    font-size: 2.5rem;
+    font-weight: bold;
+    padding: 10px 20px;
+    background-color: #f0f0f0;  /* צבע בהיר יותר */
+    border-radius: 8px;
+    position: absolute;
+    left: calc(50% + 80px);  /* ממוקם 80px מימין למרכז */
+    color: #333;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }

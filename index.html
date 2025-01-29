@@ -10,17 +10,20 @@
 
 <body onload="onInit()">
 
-    <h1  class="game-title">MINE MASTER</h1>
+    <h1 class="game-title">MINE MASTER</h1>
 
     <div class="lives">lives: <span></span></div>
-    
-    <div class="hints-container" >
+
+    <div class="hints-container">
     </div>
 
-    <div onclick="smileyOnInit()" class="smiley"><span>😉</span></div>
+    <div class="timer-smiley-container">
+        <div class="game-timer">000</div>
+        <div onclick="smileyOnInit()" class="smiley"><span>😉</span></div>
+    </div>
 
     <div class="board-container"></div>
-    
+
     <div class="levelsButtons-container">
         <button onclick="changeLevels(4,2)" class="diff-btn easy">🌱 Easy</button>
         <button onclick="changeLevels(8,14)" class="diff-btn medium">🌟 Medium</button>

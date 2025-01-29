@@ -72,14 +72,19 @@ function getImg(img) {
     return `<img src="${img}" alt=""></img>`
 }
 
-// function saveBestScore(score) {
-//     localStorage.setItem('bestScore', score);
-// }
+function saveBestScore(score) {
+    console.log('gBestScore' , gBestScore , 'score', score);
+    
+    if  (score > gBestScore) {
+        gBestScore = score
+        localStorage.setItem('bestScore', score);
+    }
+}
 
 
-// function getBestScore() {
-//     return localStorage.getItem('bestScore') || 0; // מחזיר 0 אם אין ערך שמור
-// }
+function getBestScore() {
+    return localStorage.getItem('bestScore') || 0; // מחזיר 0 אם אין ערך שמור
+}
 
 
 function onCellMarked(elCell, i, j, event) {

@@ -63,7 +63,9 @@ function hideHintsMod(rowIdx, colIdx) {
             if (cell.isShown) continue
             var elCell = document.querySelector(getSelectorBylocation({ i, j }))
             elCell.classList.remove('revealed')
-            elCell.innerHTML = ''
+            if(cell.isMarked) elCell.innerHTML = FLAGGE 
+            else elCell.innerHTML = '' 
+            
         }
     }
     var hint = gGame.hintInUsed

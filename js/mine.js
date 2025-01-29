@@ -1,4 +1,8 @@
 
+var gChacsContainer = []
+
+
+
 function updateMineCount(board) {
     for (var i = 0; i < board.length; i++) {
         for (var j = 0; j < board[0].length; j++) {
@@ -25,8 +29,42 @@ function countMineAround(board, rowIdx, colIdx) {
 }
 
 
-// expandShown(gBoard, elCell, i, j)
+
 function expandShown(board, rowIdx, colIdx) {
+
+    gChacsContainer.push({ i: rowIdx, j: colIdx })
+    console.log(gChacsContainer.length);
+    
+    for (var i = 0; i < gChacsContainer.length; i++) {
+        console.log(gChacsContainer.length);
+        
+        var cellToChech = gChacsContainer.splice(gChacsContainer.length - 1, 1)
+        rowIdx = cellToChech[0].i
+        colIdx = cellToChech[0].j
+        
+        expandShownCell(board, rowIdx, colIdx)
+        
+        console.log(gChacsContainer.length);
+    }
+}
+
+
+
+function setExpandShown(cell, i, j) {
+    var elCell = document.querySelector(getSelectorBylocation({ i, j }))
+    var Count = cell.minesAroundCount
+
+    if (!cell.isShown) gGame.shownCount++
+    cell.isShown = true
+    elCell.classList.add('revealed')
+    elCell.innerHTML = (Count) ? cell.minesAroundCount : ''
+
+}
+
+
+
+function expandShownCell(board, rowIdx, colIdx) {
+
     for (var i = rowIdx - 1; i <= rowIdx + 1; i++) {
         if (i < 0 || i >= board.length) continue
         for (var j = colIdx - 1; j <= colIdx + 1; j++) {
@@ -34,47 +72,41 @@ function expandShown(board, rowIdx, colIdx) {
             if (j < 0 || j >= board[0].length) continue
             var cell = board[i][j]
 
-            if (cell.isMarked) continue
-            // if (!cell.countMineAround) {expandShown2(board, i, j)} 
+            if (cell.isMarked || cell.isShown || cell.isMine) continue
 
-            var elCell = document.querySelector(getSelectorBylocation({ i, j }))
-            var Count = cell.minesAroundCount
-
-            if (!cell.isShown) gGame.shownCount++
-            cell.isShown = true
-            elCell.classList.add('revealed')
-            elCell.innerHTML = (Count) ? cell.minesAroundCount : ''
-
+            if (!cell.minesAroundCount) {
+                var toCheck = {
+                    i: i,
+                    j: j
+                }
+                gChacsContainer.push(toCheck)
+            }
+            setExpandShown(cell, i, j)
         }
+
     }
 
 }
 
+// function expandShown(board, rowIdx, colIdx) {
+//     console.log('expandShown2', rowIdx, colIdx);
 
+//     for (var i = rowIdx - 1; i <= rowIdx + 1; i++) {
+//         if (i < 0 || i >= board.length) continue
+//         for (var j = colIdx - 1; j <= colIdx + 1; j++) {
+//             if (i === rowIdx && j === colIdx) continue
+//             if (j < 0 || j >= board[0].length) continue
+//             var cell = board[i][j]
 
-function expandShown2(board, rowIdx, colIdx) {
-    for (var i = rowIdx - 1; i <= rowIdx + 1; i++) {
-        if (i < 0 || i >= board.length) continue
-        for (var j = colIdx - 1; j <= colIdx + 1; j++) {
-            if (i === rowIdx && j === colIdx) continue
-            if (j < 0 || j >= board[0].length) continue
-            var cell = board[i][j]
+//             if (cell.isShown) continue
+//             // if (!cell.minesAroundCount) expandShown(board, i, j)
 
-            if (cell.isMarked) continue
-            // if (!cell.countMineAround) return expandShown2(board, rowIdx, colIdx) 
+//             setExpandShown(cell, i, j)
 
-            var elCell = document.querySelector(getSelectorBylocation({ i, j }))
-            var Count = cell.minesAroundCount
+//         }
+//     }
 
-            if (!cell.isShown) gGame.shownCount++
-            cell.isShown = true
-            elCell.classList.add('revealed')
-            elCell.innerHTML = (Count) ? cell.minesAroundCount : ''
-
-        }
-    }
-
-}
+// }
 
 
 

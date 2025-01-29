@@ -6,11 +6,13 @@ const MINE_IMG = ''
 const MINE = `<img class="mine-img" src="img/mine.gif" alt=""></img>`
 // getImg(MINE_IMG)
 
-//  '💣'
+
 const FLAGGE = '🚩'
 const LIVE = '❤️'
 const HINT = '💡'
 
+var gTimerInterval
+var gBestScore 
 var gLevel = {
     SIZE: 4,
     MINES: 2
@@ -23,9 +25,11 @@ var gLevel = {
 var gEmptyCells
 
 function onInit() {
+    gBestScore = 0
 
     setEmptyCells()
     closeGameOver()
+    restartTimer()
     setGame()
     setSmiley()
     updateLives()
@@ -38,14 +42,16 @@ function onInit() {
 
 
 
+
 function onCellClicked(cell, i, j) {
 
     var cell = gBoard[i][j]
     var elCell = document.querySelector(getSelectorBylocation({ i, j }))
 
     if (!gGame.shownCount) {
-        setMines(cell,i,j)
-        
+        gGame.gameStartTime = Date.now()
+        gTimerInterval = setInterval(setGameTimer, 1000);
+        setMines(cell, i, j)
         updateMineCount(gBoard)
     }
     if (!gGame.isOn) return
@@ -126,7 +132,8 @@ function setGame() {
         lives: 3,
         hints: 3,
         isHints: false,
-        hintInUsed: ''
+        hintInUsed: '',
+        gameStartTime: 0
     }
 }
 
@@ -140,17 +147,25 @@ function gameOver(TEXT) {
             var selector = getSelectorBylocation({ i, j })
             var elCell = document.querySelector(selector)
             if (cell.isMine) {
+                clearInterval(gTimerInterval)     
+                
+                saveBestScore(Math.floor((Date.now() - gGame.gameStartTime)/1000))
+                
+                console.log(Math.floor((Date.now() - gGame.gameStartTime)/1000));
+
                 cell.isShown = true
                 elCell.classList.add('revealed')
                 elCell.innerHTML = MINE
                 document.querySelector('.game-over span').innerText = TEXT
                 document.querySelector('.game-over').style.display = 'block'
-            }
+            } 
+            
         }
 
     }
 
 }
+
 
 
 function closeGameOver() {
@@ -176,3 +191,19 @@ function checkGameOver() {
 
 
 
+function setGameTimer() {
+
+    const timeDiff = Date.now() - gGame.gameStartTime
+    const seconds = Math.floor(timeDiff / 1000)
+
+    document.querySelector('.timer-smiley-container .game-timer').innerText = seconds
+    return seconds
+      
+}
+
+
+function restartTimer(){
+    
+    document.querySelector('.timer-smiley-container .game-timer').innerText = 0
+
+}
