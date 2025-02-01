@@ -96,7 +96,12 @@ table {
 
 }
 
+.bestScore {
 
+	font-size: 3rem;
+	margin-bottom: 20px;
+	margin-top: -90px;
+}
 
 .lives {
 
@@ -104,7 +109,7 @@ table {
 
 }
 
-.hints-container {
+.hints-container{
 
 	font-size: 3rem;
 	margin-bottom: 60px;
@@ -194,21 +199,6 @@ table {
 }
 
 
-.bestScore {
-
-	font-size: 2.5rem;
-    font-weight: bold;
-    padding: 10px 20px;
-    background-color: #f0f0f0;  
-    border-radius: 8px;
-    position: absolute;
-    right: calc(50% + 110px);  
-    color: #333;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-
-
-}
-
 
 .safe-clicks-container {
     display: flex;
@@ -217,9 +207,12 @@ table {
     margin-bottom: 60px;
     font-size: 2rem;
     font-weight: bold;
+	gap: 20px
 }
 
-.safe-clicks-btn {
+.safe-clicks-btn,
+.manual-mode-btn
+ {
     padding: 12px 30px;
     font-size: 1.5rem;
     border-radius: 8px;
@@ -231,24 +224,26 @@ table {
     display: flex;
     align-items: center;
     gap: 20px;
-	margin-top: -40px;
+	margin-top: 0;
 }
 
-.safe-clicks-btn:hover {
+.safe-clicks-btn:hover,
+.manual-mode-btn:hover {
     transform: translateY(-3px);
     background-color: #e68900;
 }
 
-.safe-clicks-count {
+.safe-clicks-count,
+.manual-mode-count {
     font-size: 2rem;
     font-weight: bold;
     color: #333;
 }
 
 @keyframes safe-clicks-highlight {
-    0% { background-color: #4CAF50; }  /* ירוק כהה */
-    50% { background-color: #81C784; } /* ירוק בהיר */
-    100% { background-color: #4CAF50; }  /* חזרה לירוק כהה */
+    0% { background-color: #4CAF50; }  
+    50% { background-color: #81C784; } 
+    100% { background-color: #4CAF50; } 
 }
 
 .cell.safe-clicked {

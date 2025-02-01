@@ -10,6 +10,7 @@ const MINE = `<img class="mine-img" src="img/mine.gif" alt=""></img>`
 const FLAGGE = '🚩'
 const LIVE = '❤️'
 const HINT = '💡'
+const HINT_OFF = '🪫'
 
 var gTimerInterval = 0
 var gBestScore
@@ -23,6 +24,8 @@ var gLevel = {
 
 
 
+
+
 var gEmptyCells
 
 function onInit() {
@@ -30,7 +33,7 @@ function onInit() {
     clearInterval(gTimerInterval)  
     setEmptyCells()
     closeGameOver()
-    restartTimer()
+    
     setGame()
     gBoard = buildBoard()
     renderBoard(gBoard, '.board-container')
@@ -46,10 +49,21 @@ function onCellClicked(cell, i, j) {
     var cell = gBoard[i][j]
     var elCell = document.querySelector(getSelectorBylocation({ i, j }))
 
+    if (gGame.isManualMode && gGame.countMineMode < gLevel.MINES) {
+        cell.isMine = true
+        elCell.innerHTML = MINE
+        gGame.countMineMode++
+        updateManualModeEl()
+        if (gGame.countMineMode === gLevel.MINES) {
+            elCell.innerHTML = ''
+            onManualMode(false)
+        }
+        return
+    }
     if (!gGame.shownCount) {
         gGame.gameStartTime = Date.now()
         gTimerInterval = setInterval(setGameTimer, 1000);
-        setMines(cell, i, j)
+        if(!gGame.isManualMode) setMines(cell, i, j)
         updateMineCount(gBoard)
     }
     if (!gGame.isOn) return
@@ -59,6 +73,7 @@ function onCellClicked(cell, i, j) {
         var hint = gGame.hintInUsed
         hint.classList.remove('inUsed');
         hint.classList.add('used');
+        hint.innerText = HINT_OFF
         gGame.isHints = false
         // gGame.hintInUsed = ''
 
@@ -87,7 +102,7 @@ function onCellClicked(cell, i, j) {
 
     if (checkGameOver()) {
         setSmiley('😎')
-        gameOver('ניצחת')
+        gameOver('Congratulations! You Won! 🎉')
     }
 }
 
@@ -133,7 +148,9 @@ function setGame() {
         hintInUsed: '',
         gameStartTime: 0,
         onSafeclick: false,
-        safeclicks: 3
+        safeclicks: 3,
+        isManualMode: false,
+        countMineMode: 0
     }
 
     setSmiley()
@@ -141,6 +158,8 @@ function setGame() {
     updateHints()
     updateBestScore()
     updateSafeClicks()
+    restartTimer()
+    document.querySelector('.manual-mode-count').innerText = ''
 }
 
 
@@ -148,6 +167,12 @@ function setGame() {
 function gameOver(TEXT) {
 
     gGame.isOn = false
+    document.querySelector('.game-over span').innerText = TEXT
+    document.querySelector('.game-over').style.display = 'block'
+    saveBestScore(Math.floor((Date.now() - gGame.gameStartTime)/1000))
+    gGame.gameStartTime = 0
+    restartTimer()
+    clearInterval(gTimerInterval)     
     for (var i = 0; i < gBoard.length; i++) {
         for (var j = 0; j < gBoard[0].length; j++) {
             var cell = gBoard[i][j]
@@ -155,19 +180,14 @@ function gameOver(TEXT) {
             var elCell = document.querySelector(selector)
             if (cell.isMine) {
                 
-                clearInterval(gTimerInterval)     
-                saveBestScore(Math.floor((Date.now() - gGame.gameStartTime)/1000))
                 
                 cell.isShown = true
                 elCell.classList.add('revealed')
-                // renderCell({i,j}, MINE)
                 elCell.innerHTML = MINE
-                document.querySelector('.game-over span').innerText = TEXT
-                document.querySelector('.game-over').style.display = 'block'
             } 
             
         }
-
+        
     }
 
 }
@@ -198,17 +218,24 @@ function checkGameOver() {
 
 
 function setGameTimer() {
+    
+    const timeDiff = Date.now() - gGame.gameStartTime;
+    const totalSeconds = Math.floor(timeDiff / 1000);
 
-    const timeDiff = Date.now() - gGame.gameStartTime
-    const seconds = Math.floor(timeDiff / 1000)  
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
 
-    document.querySelector('.timer-smiley-container .game-timer').innerText = seconds
+    const formattedTime = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
+
+    document.querySelector('.timer-smiley-container .game-timer').innerText = formattedTime
     return seconds
       
 }
 
 
 function restartTimer(){
+    
     
     document.querySelector('.timer-smiley-container .game-timer').innerText = 0
 

@@ -14,23 +14,29 @@
 
     <div class="lives">lives: <span></span></div>
 
+    
     <div class="hints-container">
     </div>
-
+    
+    
+    
     <div class="safe-clicks-container">
         <button onclick="onSafeclick()" class="safe-clicks-btn">
             Safe-Clicks: <span class="safe-clicks-count">3</span>
         </button>
-    </div>
-
-    <div class="timer-smiley-container">
-        <div class="game-timer">000</div>
-        <div onclick="smileyOnInit()" class="smiley"><span>😉</span></div>
-        <div class="bestScore">0</div>
-    </div>
-
-    <div class="board-container"></div>
-
+        <button onclick="onManualMode()" class="manual-mode-btn">
+            ManualMode <span class="manual-mode-count"></span></button>
+        </div>
+        
+        <div class="timer-smiley-container">
+            <div class="game-timer">000</div>
+            <div onclick="smileyOnInit()" class="smiley"><span>😉</span></div>
+            <!-- <div class="bestScore">0</div> -->
+        </div>
+        
+        <div class="board-container"></div>
+        
+        <div class="bestScore">bestScore: <span></span></div>
     <div class="levelsButtons-container">
         <button onclick="changeLevels(4,2,'easy')" class="diff-btn easy">🌱 Easy</button>
         <button onclick="changeLevels(8,14,'medium')" class="diff-btn medium">🌟 Medium</button>

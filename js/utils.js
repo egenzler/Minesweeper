@@ -76,7 +76,6 @@ function getElcellByLocation(location){
     var selector = getSelectorBylocation(location)
     var elCell = document.querySelector(selector)
 return elCell
-
 }
 
 
@@ -100,9 +99,9 @@ function saveBestScore(score) {
 
 function getBestScore() {
     console.log(`bestScore-${gLevel.MOD}`);
-    var bestScore = `bestScore${gLevel.MOD}`
-
-    return localStorage.getItem(bestScore) || 0; // מחזיר 0 אם אין ערך שמור
+    var bestScoreMod = `bestScore-${gLevel.MOD}`
+    
+    return localStorage.getItem(bestScoreMod) || 0; // מחזיר 0 אם אין ערך שמור
 }
 
 
@@ -128,7 +127,7 @@ function onCellMarked(elCell, i, j, event) {
             gGame.markedCount++
             elCell.innerHTML = FLAGGE
         }
-        if (checkGameOver()) return gameOver('ניצחת')
+        if (checkGameOver()) return gameOver('Congratulations! You Won! 🎉')
     } return
 }
 

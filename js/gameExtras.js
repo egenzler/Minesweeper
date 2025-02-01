@@ -11,6 +11,7 @@ function setSmiley(value = '😉') {
 
 function updateLives() {
     document.querySelector('.lives span').innerText = LIVE.repeat(gGame.lives)
+  
 }
 
 function updateHints() {
@@ -23,7 +24,7 @@ function updateHints() {
 
 
 function updateBestScore() {
-    document.querySelector('.bestScore').innerText = gBestScore
+    document.querySelector('.bestScore span').innerText = gBestScore
 }
 
 function updateSafeClicks() {
@@ -106,7 +107,9 @@ function onSafeclick() {
     if (!gGame.safeclicks) return
     gGame.onSafeclick = true
     gGame.safeclicks--
-    document.querySelector('.safe-clicks-container span').innerText = gGame.safeclicks
+    
+    document.querySelector('.safe-clicks-count').innerText = gGame.safeclicks
+
     gGame.onSafeclick = false
 
     var idx = getEmptySafecell(gBoard)
@@ -119,3 +122,31 @@ function onSafeclick() {
     return
 
 }
+
+
+
+function updateManualModeEl(){
+    document.querySelector('.manual-mode-count').innerText = `${gLevel.MINES}(${gGame.countMineMode})`
+}
+function onManualMode(shouldAddOrRemoveClass = true) {
+
+    if (gGame.shownCount) return
+    updateManualModeEl()
+    gGame.isManualMode = true
+    for (var i = 0; i < gBoard.length; i++) {
+        for (var j = 0; j < gBoard[0].length; j++) {
+            var location = { i, j }
+            var elCell = getElcellByLocation(location)
+            if(shouldAddOrRemoveClass) {
+                elCell.classList.add('revealed')
+            } else {
+                elCell.classList.remove('revealed')
+                elCell.innerText = ''
+
+            }
+        }
+
+    }
+}
+
+
