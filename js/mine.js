@@ -56,6 +56,8 @@ function setExpandShown(cell, i, j) {
     cell.isShown = true
     elCell.classList.add('revealed')
     elCell.innerHTML = (Count) ? cell.minesAroundCount : ''
+    insertInLog(cell,elCell,'Shown')
+   
 
 }
 

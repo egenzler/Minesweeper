@@ -158,6 +158,8 @@ table {
 }
 
 
+
+
 .diff-btn:hover {
     transform: translateY(-5px);
 }
@@ -205,6 +207,7 @@ table {
     justify-content: center;
     align-items: center;
     margin-bottom: 60px;
+	margin-top: -25px;
     font-size: 2rem;
     font-weight: bold;
 	gap: 20px
@@ -228,7 +231,8 @@ table {
 }
 
 .safe-clicks-btn:hover,
-.manual-mode-btn:hover {
+.manual-mode-btn:hover,
+.undo:hover {
     transform: translateY(-3px);
     background-color: #e68900;
 }
@@ -241,13 +245,25 @@ table {
 }
 
 @keyframes safe-clicks-highlight {
-    0% { background-color: #4CAF50; }  
+	0% { background-color: #4CAF50; }  
     50% { background-color: #81C784; } 
     100% { background-color: #4CAF50; } 
 }
 
 .cell.safe-clicked {
-    animation: safe-clicks-highlight 1.5s ease-in-out infinite alternate;
+	animation: safe-clicks-highlight 1.5s ease-in-out infinite alternate;
     border-color: #00ff00; 
+}
+
+
+.undo {
+	padding: 5px 195px;
+	font-size: 2rem;
+	border-radius: 8px;
+    cursor: pointer;
+	background-color: #ff9800;  
+    color: white;
+	margin-bottom: 10px;
+	
 }
 

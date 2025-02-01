@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/app.css">
-    <title>Document</title>
+    <title>MINE MASTER</title>
 </head>
 
 <body onload="onInit()">
@@ -25,7 +25,7 @@
             Safe-Clicks: <span class="safe-clicks-count">3</span>
         </button>
         <button onclick="onManualMode()" class="manual-mode-btn">
-            ManualMode <span class="manual-mode-count"></span></button>
+            Manual Mode <span class="manual-mode-count"></span></button>
         </div>
         
         <div class="timer-smiley-container">
@@ -42,7 +42,8 @@
         <button onclick="changeLevels(8,14,'medium')" class="diff-btn medium">🌟 Medium</button>
         <button onclick="changeLevels(12,32,'hard')" class="diff-btn hard">💥 Hard</button>
     </div>
-
+    <button onclick="undoLastActions()" class="undo">undo</button>
+    
     <div class="game-over" style="display: none;">
         <span></span>
         <button class="restart" onclick="onInit()">restart</button>

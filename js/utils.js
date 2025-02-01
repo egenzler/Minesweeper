@@ -122,10 +122,18 @@ function onCellMarked(elCell, i, j, event) {
             gGame.markedCount--
             elCell.innerHTML = ''
 
+            insertInLog(cell,elCell,'removeFlag')
+            gGame.log.push(gGame.tmpLog)
+            gGame.tmpLog = []
+
         } else {
             cell.isMarked = true
             gGame.markedCount++
             elCell.innerHTML = FLAGGE
+
+            insertInLog(cell,elCell,'addFlag')
+            gGame.log.push(gGame.tmpLog)
+            gGame.tmpLog = []
         }
         if (checkGameOver()) return gameOver('Congratulations! You Won! 🎉')
     } return

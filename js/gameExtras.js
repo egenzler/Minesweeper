@@ -11,7 +11,7 @@ function setSmiley(value = '😉') {
 
 function updateLives() {
     document.querySelector('.lives span').innerText = LIVE.repeat(gGame.lives)
-  
+
 }
 
 function updateHints() {
@@ -21,7 +21,6 @@ function updateHints() {
     }
     document.querySelector('.hints-container').innerHTML = hintHTML
 }
-
 
 function updateBestScore() {
     document.querySelector('.bestScore span').innerText = gBestScore
@@ -107,13 +106,17 @@ function onSafeclick() {
     if (!gGame.safeclicks) return
     gGame.onSafeclick = true
     gGame.safeclicks--
-    
+
     document.querySelector('.safe-clicks-count').innerText = gGame.safeclicks
 
     gGame.onSafeclick = false
 
     var idx = getEmptySafecell(gBoard)
     var elCell = getElcellByLocation(idx)
+
+    insertInLog(idx,elCell,'Safe') 
+        gGame.log.push(gGame.tmpLog)
+        gGame.tmpLog = []
 
     elCell.classList.add("safe-clicked")
     setTimeout(() => {
@@ -125,7 +128,7 @@ function onSafeclick() {
 
 
 
-function updateManualModeEl(){
+function updateManualModeEl() {
     document.querySelector('.manual-mode-count').innerText = `${gLevel.MINES}(${gGame.countMineMode})`
 }
 function onManualMode(shouldAddOrRemoveClass = true) {
@@ -137,7 +140,7 @@ function onManualMode(shouldAddOrRemoveClass = true) {
         for (var j = 0; j < gBoard[0].length; j++) {
             var location = { i, j }
             var elCell = getElcellByLocation(location)
-            if(shouldAddOrRemoveClass) {
+            if (shouldAddOrRemoveClass) {
                 elCell.classList.add('revealed')
             } else {
                 elCell.classList.remove('revealed')
@@ -149,4 +152,64 @@ function onManualMode(shouldAddOrRemoveClass = true) {
     }
 }
 
+
+
+
+
+function undoLastActions() {
+    if (gGame.log.length === 0) return;
+
+    const lastActions = gGame.log.pop();
+
+    for (var i = 0; i < lastActions.length; i++) {
+        var lastAction = lastActions[i]
+
+        console.log(lastAction.actionType);
+
+
+        // continue
+
+        switch (lastAction.actionType) {
+            case "Shown":
+                lastAction.cell.isShown = false;
+                lastAction.elCell.classList.remove("revealed");
+                lastAction.elCell.innerText = '';
+                break;
+
+            case "addFlag":
+                lastAction.cell.isMarked = false;
+                gGame.markedCount--
+                lastAction.elCell.innerText = '';
+                break;
+
+            case "removeFlag":
+                lastAction.isMarked = true;
+                gGame.markedCount++
+                elCell.innerText = FLAGGE;
+                break;
+
+
+            case "lives--":
+                gGame.lives++
+                updateLives()
+                break;
+
+            case "HINT":
+                gGame.hint++
+                lastAction.cell.isHints = true
+                lastAction.elCell.classList.remove('used');
+                lastAction.elCell.innerText = HINT
+                break;
+
+            case "Safe":
+                gGame.safeclicks++
+                updateSafeClicks()
+                break;
+
+
+            default:
+
+        }
+    }
+}
 

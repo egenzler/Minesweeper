@@ -54,6 +54,8 @@ function onCellClicked(cell, i, j) {
         elCell.innerHTML = MINE
         gGame.countMineMode++
         updateManualModeEl()
+        
+
         if (gGame.countMineMode === gLevel.MINES) {
             elCell.innerHTML = ''
             onManualMode(false)
@@ -75,8 +77,11 @@ function onCellClicked(cell, i, j) {
         hint.classList.add('used');
         hint.innerText = HINT_OFF
         gGame.isHints = false
-        // gGame.hintInUsed = ''
-
+        gGame.hints--
+    
+        insertInLog(cell,hint,'HINT') 
+        gGame.log.push(gGame.tmpLog)
+        gGame.tmpLog = []
         return
     }
     if (cell.isMarked) return
@@ -86,6 +91,10 @@ function onCellClicked(cell, i, j) {
             elCell.innerHTML = MINE
             gGame.lives--
             updateLives()
+            insertInLog(cell,elCell,'lives--')
+            gGame.log.push(gGame.tmpLog)
+            gGame.tmpLog = []
+             
             if (!gGame.lives) {
                 setSmiley('😒')
                 return gameOver('Oops! You hit a mine')
@@ -104,14 +113,20 @@ function onCellClicked(cell, i, j) {
         setSmiley('😎')
         gameOver('Congratulations! You Won! 🎉')
     }
+    gGame.log.push(gGame.tmpLog)
+    gGame.tmpLog = []
 }
 
+function insertInLog(cell,elCell,actionType) {
+    gGame.tmpLog.push({cell,elCell,actionType})
+}
 
 function markedIsShown(cell, elCell) {
     cell.isShown = true
     gGame.shownCount++
     elCell.classList.add('revealed')
     elCell.innerHTML = +cell.minesAroundCount
+    insertInLog(cell,elCell,'Shown') 
 
 }
 
@@ -150,7 +165,9 @@ function setGame() {
         onSafeclick: false,
         safeclicks: 3,
         isManualMode: false,
-        countMineMode: 0
+        countMineMode: 0,
+        log: [],
+        tmpLog: []
     }
 
     setSmiley()
@@ -171,7 +188,7 @@ function gameOver(TEXT) {
     document.querySelector('.game-over').style.display = 'block'
     saveBestScore(Math.floor((Date.now() - gGame.gameStartTime)/1000))
     gGame.gameStartTime = 0
-    restartTimer()
+    // restartTimer()
     clearInterval(gTimerInterval)     
     for (var i = 0; i < gBoard.length; i++) {
         for (var j = 0; j < gBoard[0].length; j++) {
@@ -236,7 +253,7 @@ function setGameTimer() {
 
 function restartTimer(){
     
-    
+    gGame.gameStartTime = 0
     document.querySelector('.timer-smiley-container .game-timer').innerText = 0
 
 }
